@@ -243,6 +243,7 @@ class User:
             for row in result:
                 userMarks = row[0]
             userMarks = userMarks.split(",")
+            print(len(result))
             userMarks.append(workId)
             print(userMarks)
         except:
