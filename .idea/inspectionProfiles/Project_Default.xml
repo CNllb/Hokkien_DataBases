@@ -1,0 +1,16 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="hello.matplotlib" />
+          <option value="torchvision" />
+          <option value="torch" />
+          <option value="hello.d2l" />
+          <option value="hello.inline" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
