@@ -9,6 +9,9 @@
 # 获取全部作品信息
 # Work.getWorkInfo()
 
+# 修改信息
+# Work.updateWorkInfo(workId,workName,workContent,workType = "")
+
 import pymysql
 
 class Work:
