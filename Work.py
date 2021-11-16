@@ -9,8 +9,17 @@
 # 获取全部作品信息
 # Work.getWorkInfo()
 
-# 修改信息
-# Work.updateWorkInfo(workId,workName,workContent,workType = "")
+# 更新作品名称
+# Work.updateWorkName(workId,newWorkName)
+
+# 更新作品内容
+# Work.updateWorkContent(workId,newWorkContent)
+
+# 更新作品分类
+# Work.updateWorkType(workId,newWorkType)
+
+# 删除作品信息
+# Work.deleteWork(workId)
 
 import pymysql
 
@@ -71,7 +80,86 @@ class Work:
         cursor = conn.cursor();
         sql = "INSERT INTO Work(workId,workName,workContent,workType) VALUES (" \
               "'"+workId+"','"+workName+"','"+workContent+"','"+workType+"');"
-        print(sql)
+        try:
+            cursor.execute(sql)
+            conn.commit()
+            cursor.close()
+            conn.close()
+        except:
+            print("Error: unable to fetchall userPrefer")
+
+    # 更改作品名称
+    def updateWorkName(workId,newWorkName):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "UPDATE Work SET workName = \""+newWorkName+"\" WHERE workId = \""+workId+"\";";
+        try:
+            cursor.execute(sql)
+            conn.commit()
+            cursor.close()
+            conn.close()
+        except:
+            print("Error: unable to fetchall userPrefer")
+
+    # 更改作品内容
+    def updateWorkContent(workId,newWorkContent):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "UPDATE Work SET workContent = \""+newWorkContent+"\" WHERE workId = \""+workId+"\";"
+        try:
+            cursor.execute(sql)
+            conn.commit()
+            cursor.close()
+            conn.close()
+        except:
+            print("Error: unable to fetchall userPrefer")
+
+    # 更改作品分类
+    def updateWorkType(workId,newWorkType):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "UPDATE Work SET workType = \""+newWorkType+"\" WHERE workId = \""+workId+"\";"
+        try:
+            cursor.execute(sql)
+            conn.commit()
+            cursor.close()
+            conn.close()
+        except:
+            print("Error: unable to fetchall userPrefer")
+
+    # 删除作品
+    def deleteWork(workId):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "DELETE FROM Work WHERE workId = \""+workId+"\";"
         try:
             cursor.execute(sql)
             conn.commit()
@@ -81,4 +169,4 @@ class Work:
             print("Error: unable to fetchall userPrefer")
 
 if __name__ == "__main__":
-    Work.insertWork("12","第一个信息","信息内容")
+    Work.insertWork("6","AboutBin","66666","1515")

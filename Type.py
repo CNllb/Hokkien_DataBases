@@ -2,18 +2,23 @@
 # 调用实例
 
 # 获取全部种类
+# json OK
 # Type.getTypeInfo()
 
 # 获取类别名
+# json OK
 # Type.getTypeName(typeId)
 
 # 添加类别
+# json OK
 # Type.insertName(typeId,typeName)
 
 # 删除类别
+# json OK
 # Type.deleteType(typeId)
 
 import pymysql
+import json
 
 class Type:
 
@@ -32,11 +37,22 @@ class Type:
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
-            print(results)
             cursor.close()
             conn.close()
+            jsonData = []
+            for row in results:
+                result = {}
+                result['typeId'] = row[0]
+                result['typeName'] = row[1]
+                print
+                u'转换为列表字典的原始数据：', jsonData
+                jsonData.append(result)
+            return jsonData
         except:
-            print("Error: unable to fetchall userPrefer")
+            print("Error: unable to fetchall TypeInfo")
+        else:
+            jsondatar = json.dumps(jsonData, ensure_ascii=False)
+            return jsondatar[1:len(jsondatar) - 1]
 
     # 获取类别名
     def getTypeName(typeId):
@@ -53,13 +69,21 @@ class Type:
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
-            typeName = results[0]
-            typeName = typeName[0]
-            print(typeName)
             cursor.close()
             conn.close()
+            typeName = results[0]
+            typeName = typeName[0]
+            jsonData = []
+            result = {}
+            result['typeId'] = typeId
+            result['typeName'] = typeName
+            jsonData.append(result)
+            return jsonData
         except:
             print("Error: unable to fetchall userPrefer")
+        else:
+            jsondatar = json.dumps(jsonData, ensure_ascii=False)
+            return jsondatar[1:len(jsondatar) - 1]
 
     # 添加类别
     def insertType(typeId,typeName):
@@ -78,8 +102,13 @@ class Type:
             conn.commit()
             cursor.close()
             conn.close()
+            results = Type.getTypeInfo()
+            return results
         except:
             print("Error: unable to fetchall userPrefer")
+        else:
+            jsondatar = json.dumps(jsonData, ensure_ascii=False)
+            return jsondatar[1:len(jsondatar) - 1]
 
     # 删除类别
     def deleteType(typeId):
@@ -98,6 +127,8 @@ class Type:
             conn.commit()
             cursor.close()
             conn.close()
+            results = Type.getTypeInfo()
+            return results
         except:
             print("Error: unable to fetchall userPrefer")
 
