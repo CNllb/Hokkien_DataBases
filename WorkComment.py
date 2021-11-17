@@ -18,6 +18,7 @@
 # WorkComment.updateWorkComment(workId,workScore)
 
 import pymysql
+import json
 
 class WorkComment:
 
@@ -36,11 +37,19 @@ class WorkComment:
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
-            print(results)
             cursor.close()
             conn.close()
+            jsonData = []
+            for row in results:
+                result = {}
+                result['workId'] = row[0]
+                result['workScore'] = row[1]
+                jsonData.append(result)
         except:
             print("Error: unable to fetchall userPrefer")
+        else:
+            jsondatar = json.dumps(jsonData, ensure_ascii=False)
+            return jsondatar[1:len(jsondatar) - 1]
 
     # 获取作品评分
     def getSingleWorkComment(workId):
@@ -57,9 +66,11 @@ class WorkComment:
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
-            print(results)
             cursor.close()
             conn.close()
+            results = results[0]
+            workScore = results[0]
+            return workScore
         except:
             print("Error: unable to fetchall userPrefer")
 
@@ -80,6 +91,8 @@ class WorkComment:
             conn.commit()
             cursor.close()
             conn.close()
+            results = WorkComment.getWorkComment()
+            return results
         except:
             print("Error: unable to insert workComment")
 
@@ -100,6 +113,8 @@ class WorkComment:
             conn.commit()
             cursor.close()
             conn.close()
+            results = WorkComment.getWorkComment()
+            return results
         except:
             print("Error: unable to fetchall userPrefer")
 
@@ -120,8 +135,10 @@ class WorkComment:
             conn.commit()
             cursor.close()
             conn.close()
+            results = WorkComment.getWorkComment()
+            return results
         except:
             print("Error: unable to fetchall userPrefer")
 
 if __name__ == "__main__":
-    WorkComment.getWorkComment()
+    WorkComment.getSingleWorkComment("15")

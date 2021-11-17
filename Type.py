@@ -106,9 +106,6 @@ class Type:
             return results
         except:
             print("Error: unable to fetchall userPrefer")
-        else:
-            jsondatar = json.dumps(jsonData, ensure_ascii=False)
-            return jsondatar[1:len(jsondatar) - 1]
 
     # 删除类别
     def deleteType(typeId):
@@ -131,6 +128,3 @@ class Type:
             return results
         except:
             print("Error: unable to fetchall userPrefer")
-
-if __name__ == "__main__":
-    Type.deleteType("15")

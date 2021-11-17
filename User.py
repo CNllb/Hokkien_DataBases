@@ -1,9 +1,11 @@
 # 使用样例
 
 # 查找单个用户的信息
+# JSON OK
 # User.getSingleUserInfo(userId)
 
 # 查找全部用户信息
+# JSON OK
 # User.getUserInfo()
 
 # 插入用户信息
@@ -71,21 +73,21 @@ class User:
             results = cursor.fetchall()
             cursor.close()
             conn.close()
-            print(results)
+            results = results[0]
             jsonData = []
-            for row in results:
-                result = {}
-                result['userId'] = row[0]
-                result['phoneNumber'] = row[1]
-                result['userName'] = row[2]
-                result['profileName'] = row[3]
-                result['userMarks'] = row[4]
-                result['userWorks'] = row[5]
-                result['userSearchRecord'] = row[6]
-                result['userPrefer'] = row[7]
-                print
-                u'转换为列表字典的原始数据：', jsonData
-                jsonData.append(result)
+            result = {}
+            result['userId'] = results[0]
+            result['phoneNumber'] = results[1]
+            result['userName'] = results[2]
+            result['profileName'] = results[3]
+            result['userMarks'] = results[4]
+            result['userWorks'] = results[5]
+            result['userSearchRecord'] = results[6]
+            result['userPrefer'] = results[7]
+            print
+            u'转换为列表字典的原始数据：', jsonData
+            jsonData.append(result)
+            return jsonData
         except:
             print("Error: unable to fetch single userInfo")
         else:
@@ -125,6 +127,8 @@ class User:
                 print
                 u'转换为列表字典的原始数据：', jsonData
                 jsonData.append(result)
+            print(jsonData)
+            return jsonData
         except:
             print("Error: unable to fetch single userInfo")
         else:
@@ -132,7 +136,7 @@ class User:
             return jsondatar[1:len(jsondatar) - 1]
 
     # 插入用户信息
-    def insertUserInfo(userId,phoneNumber,userName,profilePicture = '',userMarks = None,userWorks = None,userSearchRecord = None,userPrefer=None):
+    def insertUserInfo(userId,userName,phoneNumber,profilePicture = '',userMarks = None,userWorks = None,userSearchRecord = None,userPrefer=None):
         conn = pymysql.connect(
             host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
             user="root",
@@ -143,9 +147,9 @@ class User:
         # 创建游标
         cursor = conn.cursor();
 
-        sql =  "INSERT INTO User(userId,phoneNumber,userName,profilePicture,userMarks,userWorks,userSearchRecord,userPrefer) \
+        sql =  "INSERT INTO User(userId,userName,phoneNumber,profilePicture,userMarks,userWorks,userSearchRecord,userPrefer) \
         VALUES('%s','%s','%s','%s','%s','%s','%s','%s')"% \
-        (userId,phoneNumber,userName,profilePicture,userMarks,userWorks,userSearchRecord,userPrefer);
+        (userId,userName,phoneNumber,profilePicture,userMarks,userWorks,userSearchRecord,userPrefer);
         try:
             # 执行SQL语句
             cursor.execute(sql);
@@ -153,6 +157,8 @@ class User:
             conn.commit();
             cursor.close()
             conn.close()
+            results = User.getUserInfo()
+            print(results)
         except:
             print("Error: unable to insert data")
 
@@ -472,4 +478,4 @@ class User:
             print("Error: unable to fetchall userPrefer")
 
 if __name__ == "__main__":
-    User.deleteuserInfo("7")
+    User.insertUserInfo("12","kkk","1360602885")
