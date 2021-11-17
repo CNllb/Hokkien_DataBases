@@ -19,6 +19,7 @@
 # MarkRecord.getSingleMarkRecords(userId)
 
 import pymysql
+import json
 
 class MarkRecord:
 
@@ -100,14 +101,14 @@ class MarkRecord:
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
-            print(results)
             cursor.close()
             conn.close()
+            jsonData = []
         except:
             print("Error: unable to fetchall userPrefer")
 
     # 插入收藏记录
-    def insertMarkRecord(markRecord,userId,workId):
+    def insertMarkRecord(userId,workId):
         conn = pymysql.connect(
             host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
             user="root",
@@ -117,9 +118,9 @@ class MarkRecord:
 
         # 创建游标
         cursor = conn.cursor();
-        sql = "INSERT INTO MarkRecord(userId,workId,markRecord) \
-        VALUES('%s','%s','%s')"% \
-        (userId,workId,markRecord);
+        sql = "INSERT INTO MarkRecord(userId,workId) \
+        VALUES('%s','%s')"% \
+        (userId,workId);
         try:
             cursor.execute(sql)
             conn.commit()
@@ -150,4 +151,4 @@ class MarkRecord:
 
 
 if __name__ == "__main__":
-    MarkRecord.getSingleMarkRecords("15251")
+    MarkRecord.insertMarkRecord("15251","100005")

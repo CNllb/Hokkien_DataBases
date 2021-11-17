@@ -1,9 +1,11 @@
 # 调用实例
 
 # 添加作品信息
+# JSON OK
 # Work.insertWork(workName,workContent,workType = "")
 
 # 获取单个作品信息
+# JSON OK
 # Work.getSingleWorkInfo(workId)
 
 # 获取全部作品信息
@@ -11,18 +13,23 @@
 # Work.getWorkInfo()
 
 # 更新作品名称
+# JSON OK
 # Work.updateWorkName(workId,newWorkName)
 
 # 更新作品内容
+# JSON OK
 # Work.updateWorkContent(workId,newWorkContent)
 
 # 更新作品分类
+# JSON OK
 # Work.updateWorkType(workId,newWorkType)
 
 # 删除作品信息
+# JSON OK
 # Work.deleteWork(workId)
 
 # 获取用户的作品
+# JSON OK
 # Work.getUserWork(workId)
 
 import pymysql
@@ -47,9 +54,18 @@ class Work:
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
-            print(results)
             cursor.close()
             conn.close()
+            results = results[0]
+            result = {}
+            jsonData = []
+            result["workId"] = results[0]
+            result["workName"] = results[1]
+            result["workContent"] = results[2]
+            result["workType"] = results[3]
+            result["userId"] = results[4]
+            jsonData.append(result)
+            print(jsonData)
         except:
             print("Error: unable to get workInfo")
 
@@ -225,4 +241,4 @@ class Work:
             print("Error: unable to fetchall userPrefer")
 
 if __name__ == "__main__":
-    Work.getWorkInfo()
+    Work.getSingleWorkInfo("10004")
