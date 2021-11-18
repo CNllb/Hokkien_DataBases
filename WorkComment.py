@@ -73,6 +73,9 @@ class WorkComment:
             return workScore
         except:
             print("Error: unable to fetchall userPrefer")
+        else:
+            jsondatar = json.dumps(jsonData, ensure_ascii=False)
+            return jsondatar[1:len(jsondatar) - 1]
 
     # 添加作品评分
     def insertWorkComment(workId,workScore):
@@ -91,7 +94,7 @@ class WorkComment:
             conn.commit()
             cursor.close()
             conn.close()
-            results = WorkComment.getWorkComment()
+            results = WorkComment.getWorkComment(workId)
             return results
         except:
             print("Error: unable to insert workComment")
@@ -113,7 +116,7 @@ class WorkComment:
             conn.commit()
             cursor.close()
             conn.close()
-            results = WorkComment.getWorkComment()
+            results = WorkComment.getWorkComment(workId)
             return results
         except:
             print("Error: unable to fetchall userPrefer")
@@ -135,7 +138,7 @@ class WorkComment:
             conn.commit()
             cursor.close()
             conn.close()
-            results = WorkComment.getWorkComment()
+            results = WorkComment.getSingleWorkComment(workId)
             return results
         except:
             print("Error: unable to fetchall userPrefer")

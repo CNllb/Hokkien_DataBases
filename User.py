@@ -9,47 +9,63 @@
 # User.getUserInfo()
 
 # 插入用户信息
+# JSON OK
 # User.insertUserInfo(userId,phoneNumber,userName,profilePicture = '',userMarks = '',
 # userWorks = '',userSearchRecord = '',userPrefer=''):
 
 # 更换用户头像
+# JSON OK
 # User.updateprofilePicture(userId,newProfilePicture)
 
 # 更换用户名
+# JSON OK
 # User.updateUserName(userId,newUserName)
 
 # 更换用户手机号码
+# JSON OK
 # User.updatephoneNumber(userId,newphoneNumber)
 
 # 获取用户收藏信息
+# JSON OK
 # User.getuserMarks(userId)
 
 # 添加用户收藏记录
+# JSON OK
 # User.insertuserMarks(userId,workId)
 
 # 删除用户收藏记录
+# JSON OK
 # User.deleteuserMarks(userId,workId)
 
 # 获取用户历史浏览记录
+# JSON OK
 # User.getUserSearchRecord(userId)
 
 # 添加用户历史浏览记录
+# JSON OK
 # User.insertuserSearchRecord(userId,workId)
 
 # 删除用户历史浏览记录
+# JSON OK
 # User.deleteuserSearchRecord(userId, workId)
 
 # 获取用户喜好
+# JSON OK
 # User.getuserPrefer(userId)
 
 # 添加用户喜好
+# JSON OK
 # User.insertuserPrefer(userId,typeId)
 
 # 删除用户喜好
+# JSON OK
 # User.deleteuserPrefer(userId,typeId)
 
 import pymysql
 import json
+
+import Type
+import Work
 
 class User:
 
@@ -80,10 +96,10 @@ class User:
             result['phoneNumber'] = results[1]
             result['userName'] = results[2]
             result['profileName'] = results[3]
-            result['userMarks'] = results[4]
-            result['userWorks'] = results[5]
-            result['userSearchRecord'] = results[6]
-            result['userPrefer'] = results[7]
+            result['userMarks'] = User.getuserMarks(userId)
+            result['userWorks'] = Work.Work.getUserWork(userId)
+            result['userSearchRecord'] = User.getUserSearchRecord(userId)
+            result['userPrefer'] = User.getuserPrefer(userId)
             print
             u'转换为列表字典的原始数据：', jsonData
             jsonData.append(result)
@@ -127,7 +143,6 @@ class User:
                 print
                 u'转换为列表字典的原始数据：', jsonData
                 jsonData.append(result)
-            print(jsonData)
             return jsonData
         except:
             print("Error: unable to fetch single userInfo")
@@ -136,7 +151,7 @@ class User:
             return jsondatar[1:len(jsondatar) - 1]
 
     # 插入用户信息
-    def insertUserInfo(userId,userName,phoneNumber,profilePicture = '',userMarks = None,userWorks = None,userSearchRecord = None,userPrefer=None):
+    def insertUserInfo(userName,phoneNumber,profilePicture = '',userMarks = None,userWorks = None,userSearchRecord = None,userPrefer=None):
         conn = pymysql.connect(
             host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
             user="root",
@@ -147,9 +162,9 @@ class User:
         # 创建游标
         cursor = conn.cursor();
 
-        sql =  "INSERT INTO User(userId,userName,phoneNumber,profilePicture,userMarks,userWorks,userSearchRecord,userPrefer) \
-        VALUES('%s','%s','%s','%s','%s','%s','%s','%s')"% \
-        (userId,userName,phoneNumber,profilePicture,userMarks,userWorks,userSearchRecord,userPrefer);
+        sql =  "INSERT INTO User(userName,phoneNumber,profilePicture,userMarks,userWorks,userSearchRecord,userPrefer) \
+        VALUES('%s','%s','%s','%s','%s','%s','%s')"% \
+        (userName,phoneNumber,profilePicture,userMarks,userWorks,userSearchRecord,userPrefer);
         try:
             # 执行SQL语句
             cursor.execute(sql);
@@ -158,7 +173,7 @@ class User:
             cursor.close()
             conn.close()
             results = User.getUserInfo()
-            print(results)
+            return results
         except:
             print("Error: unable to insert data")
 
@@ -181,6 +196,8 @@ class User:
             conn.commit()
             cursor.close()
             conn.close()
+            results = User.getSingleUserInfo(userId)
+            return results
         except:
             print("Error: unable to update profilePicture")
 
@@ -203,6 +220,8 @@ class User:
             conn.commit()
             cursor.close()
             conn.close()
+            results = User.getSingleUserInfo(userId)
+            return results
         except:
             print("Error: unable to update userName")
 
@@ -224,10 +243,12 @@ class User:
             cursor.execute(sql)
             # 执行sql语句
             conn.commit()
+            cursor.close()
+            conn.close()
+            result = User.getSingleUserInfo(userId)
+            return result
         except:
             print("Error: unable to update phoneNumber")
-        cursor.close()
-        conn.close()
 
     # 查找用户收藏记录
     def getuserMarks(userId):
@@ -253,7 +274,15 @@ class User:
             for i in userMarks:
                 if i == "None":
                     userMarks.remove(i)
-            return userMarks
+            jsonData = []
+            for i in userMarks:
+                singleWork = {}
+                singleWork["workId"] = i
+                singleWork["workName"] = Work.Work.getWorkName(i)
+                singleWork["workContent"] = Work.Work.getWorkContent(i)
+                singleWork["workType"] = Work.Work.getWorkTypeName(i)
+                jsonData.append(singleWork)
+            return jsonData
         except:
             print("Error: unable to fetch userMarks")
 
@@ -280,6 +309,8 @@ class User:
             conn.commit();
             cursor.close()
             conn.close()
+            results = User.getuserMarks(userId)
+            return results
         except:
             print("Error: unable to update userMarks")
 
@@ -303,6 +334,10 @@ class User:
         try:
             cursor.execute(sql)
             conn.commit()
+            cursor.close()
+            conn.close()
+            results = User.getuserMarks(userId)
+            return results
         except:
             print("Error: unable to update userMarks")
 
@@ -329,7 +364,15 @@ class User:
             for i in userSearchRecord:
                 if i == "None":
                     userSearchRecord.remove(i)
-            return userSearchRecord
+            jsonData = []
+            for i in userSearchRecord:
+                singleWork = {}
+                singleWork["workId"] = i
+                singleWork["workName"] = Work.Work.getWorkName(i)
+                singleWork["workContent"] = Work.Work.getWorkContent(i)
+                singleWork["workType"] = Work.Work.getWorkTypeName(i)
+                jsonData.append(singleWork)
+            return jsonData
         except:
             print("Error:  unable to get userSearchRecord")
 
@@ -353,6 +396,8 @@ class User:
             conn.commit()
             cursor.close()
             conn.close()
+            results = User.getUserSearchRecord(userId)
+            return results
         except:
             print("Error: unable to update userSearchRecord.")
 
@@ -378,6 +423,8 @@ class User:
             conn.commit()
             cursor.close()
             conn.close()
+            results = User.getUserSearchRecord(userId)
+            return results
         except:
             print("Error: unable to update userSearchRecord.")
 
@@ -404,7 +451,13 @@ class User:
             for i in userPrefer:
                 if i == "None":
                     userPrefer.remove(i)
-            return userPrefer
+            jsonData = []
+            for i in userPrefer:
+                singleType = {}
+                singleType["typeId"] = i
+                singleType["typeName"] = Type.Type.getTypeName(i)
+                jsonData.append(singleType)
+            return jsonData
         except:
             print("Error: unable to fetchall userPrefer")
 
@@ -429,6 +482,8 @@ class User:
             conn.commit()
             cursor.close()
             conn.close()
+            results = User.getuserPrefer(userId)
+            return results
         except:
             print("Error: unable to update userPrefer")
 
@@ -454,6 +509,8 @@ class User:
             conn.commit()
             cursor.close()
             conn.close()
+            results = User.getuserPrefer(userId)
+            return results
         except:
             print("Error: unable to fetchall userPrefer")
 
@@ -474,8 +531,10 @@ class User:
             conn.commit()
             cursor.close()
             conn.close()
+            results = User.getUserInfo()
+            return results
         except:
             print("Error: unable to fetchall userPrefer")
 
 if __name__ == "__main__":
-    User.insertUserInfo("12","kkk","1360602885")
+    User.getSingleUserInfo("1000000001")

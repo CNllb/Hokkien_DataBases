@@ -68,6 +68,9 @@ class Work:
             print(jsonData)
         except:
             print("Error: unable to get workInfo")
+        else:
+            jsondatar = json.dumps(jsonData, ensure_ascii=False)
+            return jsondatar[1:len(jsondatar) - 1]
 
     # 获取全部作品
     def getWorkInfo():
@@ -98,6 +101,9 @@ class Work:
             return jsonData
         except:
             print("Error: unable to get workInfo")
+        else:
+            jsondatar = json.dumps(jsonData, ensure_ascii=False)
+            return jsondatar[1:len(jsondatar) - 1]
 
     # 添加作品信息
     def insertWork(workName,workContent,userId,workType = ""):
@@ -139,7 +145,7 @@ class Work:
             conn.commit()
             cursor.close()
             conn.close()
-            results = Work.getWorkInfo()
+            results = Work.getSingleWorkInfo(workId)
             return results
         except:
             print("Error: unable to fetchall userPrefer")
@@ -161,7 +167,7 @@ class Work:
             conn.commit()
             cursor.close()
             conn.close()
-            results = Work.getWorkInfo()
+            results = Work.getSingleWorkInfo(workId)
             return results
         except:
             print("Error: unable to fetchall userPrefer")
@@ -183,7 +189,7 @@ class Work:
             conn.commit()
             cursor.close()
             conn.close()
-            results = Work.getWorkInfo()
+            results = Work.getSingleWorkInfo(workId)
             return results
         except:
             print("Error: unable to fetchall userPrefer")
@@ -240,5 +246,72 @@ class Work:
         except:
             print("Error: unable to fetchall userPrefer")
 
-if __name__ == "__main__":
-    Work.getSingleWorkInfo("10004")
+    # 获取作品名
+    def getWorkName(workId):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "SELECT workName FROM Work WHERE workId = \""+workId+"\";"
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            results = results[0]
+            results = results[0]
+            return results
+        except:
+            print("Error: unable to fetchall workName")
+
+    # 获取作品内容
+    def getWorkContent(workId):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "SELECT workContent FROM Work WHERE workId = \"" + workId + "\";"
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            results = results[0]
+            results = results[0]
+            return results
+        except:
+            print("Error: unable to fetchall userPrefer")
+
+    # 获取作品类名
+    def getWorkTypeName(workId):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "SELECT workType FROM Work WHERE workId = \"" + workId + "\";"
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            typeId = results[0]
+            typeId = typeId[0]
+            typeName = Type.Type.getTypeName(typeId)
+            return typeName
+        except:
+            print("Error: unable to fetchall userPrefer")

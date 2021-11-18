@@ -5,9 +5,9 @@
 # json OK
 # Type.getTypeInfo()
 
-# 获取类别名
+# 获取单个类别信息
 # json OK
-# Type.getTypeName(typeId)
+# Type.getSingleTypeInfo(typeId)
 
 # 添加类别
 # json OK
@@ -54,8 +54,8 @@ class Type:
             jsondatar = json.dumps(jsonData, ensure_ascii=False)
             return jsondatar[1:len(jsondatar) - 1]
 
-    # 获取类别名
-    def getTypeName(typeId):
+    # 获取单个类别信息
+    def getSingleTypeInfo(typeId):
         conn = pymysql.connect(
             host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
             user="root",
@@ -128,3 +128,25 @@ class Type:
             return results
         except:
             print("Error: unable to fetchall userPrefer")
+
+    def getTypeName(typeId):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "SELECT typeName FROM Type WHERE typeId = \"" + typeId + "\";"
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            results = results[0]
+            results = results[0]
+            return results
+        except:
+            print("Error: unable to fetchall typeName")
