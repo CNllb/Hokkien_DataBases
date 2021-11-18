@@ -286,9 +286,36 @@ class User:
         except:
             print("Error: unable to fetch userMarks")
 
+    def getuserMarks_1(userId):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "SELECT userMarks FROM User WHERE userId = \""+userId+"\";";
+
+        try:
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            for row in result:
+                userMarks = row[0]
+            userMarks = userMarks.split(",")
+            for i in userMarks:
+                if i == "None":
+                    userMarks.remove(i)
+            return userMarks
+        except:
+            print("Error: unable to fetch userMarks")
+
     # 添加用户收藏记录
     def insertuserMarks(userId,workId):
-        userMarks = User.getuserMarks(userId)
+        userMarks = User.getuserMarks_1(userId)
         print(userMarks)
         userMarks.append(workId)
         print(userMarks)
@@ -316,7 +343,7 @@ class User:
 
     # 删除用户收藏记录
     def deleteuserMarks(userId,workId):
-        userMarks = User.getuserMarks(userId)
+        userMarks = User.getuserMarks_1(userId)
         for i in userMarks:
             if i == workId:
                 userMarks.remove(i)
@@ -376,9 +403,35 @@ class User:
         except:
             print("Error:  unable to get userSearchRecord")
 
+    def getUserSearchRecord_1(userId):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "SELECT userSearchRecord FROM User WHERE userId = \""+userId+"\"";
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            userSearchRecord = results[0]
+            userSearchRecord = userSearchRecord[0]
+            userSearchRecord = userSearchRecord.split(",")
+            for i in userSearchRecord:
+                if i == "None":
+                    userSearchRecord.remove(i)
+            return userSearchRecord
+        except:
+            print("Error:  unable to get userSearchRecord")
+
     # 添加用户历史浏览记录
     def insertuserSearchRecord(userId,workId):
-        userSearchRecord = User.getUserSearchRecord(userId)
+        userSearchRecord = User.getUserSearchRecord_1(userId)
         userSearchRecord.append(workId)
         str1 = ",".join(userSearchRecord)
         conn = pymysql.connect(
@@ -403,7 +456,7 @@ class User:
 
     # 删除用户浏览记录
     def deleteuserSearchRecord(userId, workId):
-        userSearchRecord = User.getUserSearchRecord(userId)
+        userSearchRecord = User.getUserSearchRecord_1(userId)
         for i in userSearchRecord:
             if i == workId:
                 userSearchRecord.remove()
@@ -461,9 +514,35 @@ class User:
         except:
             print("Error: unable to fetchall userPrefer")
 
+    def getuserPrefer_1(userId):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "SELECT userPrefer FROM User WHERE userId = \""+userId+"\";";
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            userPrefer = results[0]
+            userPrefer = userPrefer[0]
+            userPrefer = userPrefer.split(",")
+            for i in userPrefer:
+                if i == "None":
+                    userPrefer.remove(i)
+            return userPrefer
+        except:
+            print("Error: unable to fetchall userPrefer")
+
     # 添加用户喜好
     def insertuserPrefer(userId,typeId):
-        userPrefer = User.getuserPrefer(userId)
+        userPrefer = User.getuserPrefer_1(userId)
         userPrefer.append(typeId)
         str1 = ",".join(userPrefer)
         print(userPrefer)
@@ -489,7 +568,7 @@ class User:
 
     # 删除用户喜好
     def deleteuserPrefer(userId,typeId):
-        userPrefer = User.getuserPrefer(userId)
+        userPrefer = User.getuserPrefer_1(userId)
         for i in userPrefer:
             if i == typeId:
                 userPrefer.remove(i)

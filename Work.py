@@ -65,7 +65,7 @@ class Work:
             result["workType"] = Work.getWorkTypeName(workId)
             result["userId"] = results[4]
             jsonData.append(result)
-            print(jsonData)
+            return jsonData
         except:
             print("Error: unable to get workInfo")
         else:
@@ -316,24 +316,5 @@ class Work:
         except:
             print("Error: unable to fetchall TypeName")
 
-    def set_1():
-        conn = pymysql.connect(
-            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
-            user="root",
-            port=25438,
-            password="Lcx010327",
-            database="Hokkien");
-
-        # 创建游标
-        cursor = conn.cursor();
-        sql = "ALTER TABLE Work ADD CONSTRAINT Work_To_Type FOREIGN KEY(workType) REFERENCES Type(typeId);"
-        try:
-            cursor.execute(sql)
-            conn.commit()
-            cursor.close()
-            conn.close()
-        except:
-            print("Error: unable to fetchall workType")
-
 if __name__ == "__main__":
-    Work.set_1()
+    Work.getWorkInfo()
