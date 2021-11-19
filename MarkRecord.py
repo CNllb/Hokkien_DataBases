@@ -38,11 +38,18 @@ class MarkRecord:
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
-            print(results)
             cursor.close()
             conn.close()
+            jsonData = []
+            for row in results:
+                result = {}
+                result["markRecord"] = row[2]
+                result["userId"] = row[0]
+                result["workId"] = row[1]
+                jsonData.append(result)
+            return jsonData
         except:
-            print("Error: unable to fetchall MarkRecord")
+            return False
 
     # 获取某个作品的收藏人数
     def getMarkRecordCount(workId):
@@ -59,11 +66,13 @@ class MarkRecord:
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
-            print(results)
             cursor.close()
             conn.close()
+            results = results[0]
+            results = results[0]
+            return results
         except:
-            print("Error: unable to fetchall userPrefer")
+            return False
 
     # 获取某个用户的收藏作品数量
     def getSingleMarkRecordCount(userId):
@@ -80,9 +89,11 @@ class MarkRecord:
         try:
             cursor.execute(sql)
             results = cursor.fetchall()
-            print(results)
             cursor.close()
             conn.close()
+            result = results[0]
+            result = result[0]
+            return result
         except:
             print("Error: unable to fetchall userPrefer")
 
@@ -104,8 +115,15 @@ class MarkRecord:
             cursor.close()
             conn.close()
             jsonData = []
+            for row in results:
+                result = {}
+                result["markRecord"] = row[2]
+                result["userId"] = row[0]
+                result["workId"] = row[1]
+                jsonData.append(result)
+            return jsonData
         except:
-            print("Error: unable to fetchall userPrefer")
+            return False
 
     # 插入收藏记录
     def insertMarkRecord(userId,workId):
@@ -126,8 +144,10 @@ class MarkRecord:
             conn.commit()
             cursor.close()
             conn.close()
+            results = MarkRecord.getMarkRecord()
+            return results
         except:
-            print("Error: unable to insert markRecord")
+            return False
 
     # 删除收藏记录
     def deleteMarkRecord(userId,workId):
@@ -146,9 +166,7 @@ class MarkRecord:
             conn.commit()
             cursor.close()
             conn.close()
+            results = MarkRecord.getMarkRecord()
+            return results
         except:
-            print("Error: unable to delete markRecord")
-
-
-if __name__ == "__main__":
-    MarkRecord.insertMarkRecord("15251","100005")
+            return False

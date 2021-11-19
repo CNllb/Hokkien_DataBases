@@ -49,7 +49,7 @@ class Type:
                 jsonData.append(result)
             return jsonData
         except:
-            print("Error: unable to fetchall TypeInfo")
+            return False
         else:
             jsondatar = json.dumps(jsonData, ensure_ascii=False)
             return jsondatar[1:len(jsondatar) - 1]
@@ -80,7 +80,7 @@ class Type:
             jsonData.append(result)
             return jsonData
         except:
-            print("Error: unable to fetchall userPrefer")
+            return False
         else:
             jsondatar = json.dumps(jsonData, ensure_ascii=False)
             return jsondatar[1:len(jsondatar) - 1]
@@ -105,7 +105,7 @@ class Type:
             results = Type.getTypeInfo()
             return results
         except:
-            print("Error: unable to fetchall userPrefer")
+            return False
 
     # 删除类别
     def deleteType(typeId):
@@ -127,7 +127,7 @@ class Type:
             results = Type.getTypeInfo()
             return results
         except:
-            print("Error: unable to fetchall userPrefer")
+            return False
 
     def getTypeName(typeId):
         conn = pymysql.connect(
@@ -149,4 +149,4 @@ class Type:
             results = results[0]
             return results
         except:
-            print("Error: unable to fetchall typeName")
+            return False

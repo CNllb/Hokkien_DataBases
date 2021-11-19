@@ -105,7 +105,7 @@ class User:
             jsonData.append(result)
             return jsonData
         except:
-            print("Error: unable to fetch single userInfo")
+            return False
         else:
             jsondatar = json.dumps(jsonData, ensure_ascii=False)
             return jsondatar[1:len(jsondatar) - 1]
@@ -145,7 +145,7 @@ class User:
                 jsonData.append(result)
             return jsonData
         except:
-            print("Error: unable to fetch single userInfo")
+            return False
         else:
             jsondatar = json.dumps(jsonData, ensure_ascii=False)
             return jsondatar[1:len(jsondatar) - 1]
@@ -175,7 +175,7 @@ class User:
             results = User.getUserInfo()
             return results
         except:
-            print("Error: unable to insert data")
+            return False
 
     # 更换用户头像
     def updateprofilePicture(userId,newProfilePicture):
@@ -199,7 +199,7 @@ class User:
             results = User.getSingleUserInfo(userId)
             return results
         except:
-            print("Error: unable to update profilePicture")
+            return False
 
     # 更换用户名
     def updateUserName(userId,newUserName):
@@ -248,7 +248,7 @@ class User:
             result = User.getSingleUserInfo(userId)
             return result
         except:
-            print("Error: unable to update phoneNumber")
+            return False
 
     # 查找用户收藏记录
     def getuserMarks(userId):
@@ -284,7 +284,10 @@ class User:
                 jsonData.append(singleWork)
             return jsonData
         except:
-            print("Error: unable to fetch userMarks")
+            return False
+        else:
+            jsondatar = json.dumps(jsonData, ensure_ascii=False)
+            return jsondatar[1:len(jsondatar) - 1]
 
     def getuserMarks_1(userId):
         conn = pymysql.connect(
@@ -311,7 +314,7 @@ class User:
                     userMarks.remove(i)
             return userMarks
         except:
-            print("Error: unable to fetch userMarks")
+            return False
 
     # 添加用户收藏记录
     def insertuserMarks(userId,workId):
@@ -401,7 +404,10 @@ class User:
                 jsonData.append(singleWork)
             return jsonData
         except:
-            print("Error:  unable to get userSearchRecord")
+            return False
+        else:
+            jsondatar = json.dumps(jsonData, ensure_ascii=False)
+            return jsondatar[1:len(jsondatar) - 1]
 
     def getUserSearchRecord_1(userId):
         conn = pymysql.connect(
@@ -479,7 +485,7 @@ class User:
             results = User.getUserSearchRecord(userId)
             return results
         except:
-            print("Error: unable to update userSearchRecord.")
+            return False
 
     # 查看用户喜好
     def getuserPrefer(userId):
@@ -512,7 +518,7 @@ class User:
                 jsonData.append(singleType)
             return jsonData
         except:
-            print("Error: unable to fetchall userPrefer")
+            return False
 
     def getuserPrefer_1(userId):
         conn = pymysql.connect(
@@ -538,7 +544,7 @@ class User:
                     userPrefer.remove(i)
             return userPrefer
         except:
-            print("Error: unable to fetchall userPrefer")
+            return False
 
     # 添加用户喜好
     def insertuserPrefer(userId,typeId):
@@ -564,7 +570,7 @@ class User:
             results = User.getuserPrefer(userId)
             return results
         except:
-            print("Error: unable to update userPrefer")
+            return False
 
     # 删除用户喜好
     def deleteuserPrefer(userId,typeId):
@@ -591,7 +597,7 @@ class User:
             results = User.getuserPrefer(userId)
             return results
         except:
-            print("Error: unable to fetchall userPrefer")
+            return False
 
     # 删除用户信息
     def deleteuserInfo(userId):
@@ -613,7 +619,4 @@ class User:
             results = User.getUserInfo()
             return results
         except:
-            print("Error: unable to fetchall userPrefer")
-
-if __name__ == "__main__":
-    User.getSingleUserInfo("1000000001")
+            return False
