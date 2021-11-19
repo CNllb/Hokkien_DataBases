@@ -119,8 +119,8 @@ class Work:
 
         # 创建游标
         cursor = conn.cursor();
-        sql = "INSERT INTO Work(workName,workContent,userId,workType,fileType) VALUES('%s','%s','%s','%s');"% \
-        (workName,workContent,userId,fileType,workType);
+        sql = "INSERT INTO Work(workName,workContent,userId,workType,fileType) VALUES('%s','%s','%s','%s','%s');"% \
+        (workName,workContent,userId,fileType,workType,fileType);
         try:
             cursor.execute(sql)
             conn.commit()
