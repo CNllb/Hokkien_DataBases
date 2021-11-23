@@ -399,6 +399,7 @@ class User:
             for i in userSearchRecord:
                 singleWork = {}
                 singleWork["workId"] = i
+                
                 singleWork["workName"] = Work.Work.getWorkName(i)
                 singleWork["workContent"] = Work.Work.getWorkContent(i)
                 singleWork["workType"] = Work.Work.getWorkTypeName(i)
