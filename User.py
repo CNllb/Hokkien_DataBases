@@ -5,6 +5,9 @@
 # JSON OK
 # User.getSingleUserInfo(userId)
 
+# 转换phoneNumber
+# User.translateToUserId(phoneNumber)
+
 # 查找全部用户信息
 # JSON OK
 # User.getUserInfo()
@@ -399,7 +402,7 @@ class User:
             for i in userSearchRecord:
                 singleWork = {}
                 singleWork["workId"] = i
-                
+
                 singleWork["workName"] = Work.Work.getWorkName(i)
                 singleWork["workContent"] = Work.Work.getWorkContent(i)
                 singleWork["workType"] = Work.Work.getWorkTypeName(i)
@@ -619,6 +622,29 @@ class User:
             cursor.close()
             conn.close()
             results = User.getUserInfo()
+            return results
+        except:
+            return False
+
+    # 转换phoneNumber为userId
+    def translateToUserId(phoneNumber):
+        conn = pymysql.connect(
+            host="gz-cynosdbmysql-grp-56sj4bjz.sql.tencentcdb.com",
+            user="root",
+            port=25438,
+            password="Lcx010327",
+            database="Hokkien");
+
+        # 创建游标
+        cursor = conn.cursor();
+        sql = "SELECT userId FROM User WHERE phoneNumber = \""+phoneNumber+"\";"
+        try:
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            results = results[0]
+            results = results[0]
             return results
         except:
             return False
